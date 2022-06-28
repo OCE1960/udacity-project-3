@@ -159,7 +159,7 @@ jobs:
             curl http://checkip.amazonaws.com >> .circleci/ansible/inventory.txt
             exit 0
       - persist_to_workspace:
-          root: ~/
+          root: .circleci
           paths:
             - .circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure 
