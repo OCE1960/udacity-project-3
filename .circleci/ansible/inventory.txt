@@ -1,1 +1,2 @@
 [web]
+web_server ansible_host=44.202.51.21

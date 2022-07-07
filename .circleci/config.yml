@@ -156,13 +156,37 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            curl http://checkip.amazonaws.com >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances --instance-ids i-0b192c9e027215e79 \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --output text >> .circleci/ansible/inventory.txt
             exit 0
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure 
+      - destroy-environment
+
+  configure-infrastructure:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "6e:19:3c:22:d9:f5:b1:a4:06:f2:3c:05:ba:95:a1:b1"
+      - attach_workspace:
+          at: /.circleci/ansible
+      - run:
+          name: Install dependencies
+          command: |
+            yum install -y tar gzip ansible
+            exit 0
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            exit 1
+      - destroy-environment
 
 workflows:
   default:
