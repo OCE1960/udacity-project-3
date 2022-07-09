@@ -156,8 +156,8 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            aws ec2 describe-instances --instance-ids i-0b192c9e027215e79 \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            aws ec2 describe-instances \
+            --query "Reservations[*].Instances[*].PublicIpAddress" \
             --output text >> .circleci/ansible/inventory.txt
             exit 0
       - persist_to_workspace:
@@ -173,7 +173,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "6e:19:3c:22:d9:f5:b1:a4:06:f2:3c:05:ba:95:a1:b1"
+            - 6e:19:3c:22:d9:f5:b1:a4:06:f2:3c:05:ba:95:a1:b1
       - attach_workspace:
           at: /.circleci/ansible
       - run:
@@ -201,4 +201,8 @@ workflows:
           requires: [build-frontend]
       - scan-backend:
           requires: [build-backend]
-      - deploy-infrastructure
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+            branches:
+              only: [test-feature-branch]
