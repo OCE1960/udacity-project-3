@@ -15,14 +15,12 @@ commands:
           command: |
             aws cloudformation delete-stack \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" 
-            exit 0
       - run:
           name: Destroy frontend environments
           when: on_fail
           command: |
             aws cloudformation delete-stack \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
-            exit 0
 
 jobs:
   build-frontend:
@@ -38,7 +36,6 @@ jobs:
             cd frontend
             npm install
             npm run build
-            exit 0
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -56,7 +53,6 @@ jobs:
             cd backend
             npm install
             npm run build
-            exit 0
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build         
@@ -74,7 +70,6 @@ jobs:
             cd frontend
             npm install
             npm run test
-            exit 0
 
   test-backend:
     docker:
@@ -89,7 +84,6 @@ jobs:
             cd backend
             npm install
             npm run test
-            exit 0
     
   scan-frontend:
     docker:
@@ -106,7 +100,6 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit --audit-level=critical
-            exit 0
 
   scan-backend:
     docker:
@@ -123,7 +116,6 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit --audit-level=critical
-            exit 0
 
   deploy-infrastructure:
     docker:
@@ -143,7 +135,6 @@ jobs:
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
               --tags project=udapeople 
-              exit 0
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -152,14 +143,13 @@ jobs:
               --tags project=udapeople-frontend \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
-              exit 0
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
             --query "Reservations[*].Instances[*].PublicIpAddress" \
             --output text >> .circleci/ansible/inventory.txt
-            exit 0
+            cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -180,12 +170,11 @@ jobs:
           name: Install dependencies
           command: |
             yum install -y tar gzip ansible
-            exit 0
       - run:
           name: Configure server
           command: |
-            # Your code here
-            exit 1
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment
 
 workflows:
@@ -203,6 +192,3 @@ workflows:
           requires: [build-backend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [test-feature-branch]
