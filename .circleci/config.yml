@@ -10,6 +10,13 @@ commands:
         default: ""  
     steps:
       - run:
+          name: aws cli
+          when: on_fail
+          command: |
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+            export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" \
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      - run:
           name: Destroy backend environments
           when: on_fail
           command: |
@@ -185,7 +192,7 @@ jobs:
           fingerprints:
             - 6e:19:3c:22:d9:f5:b1:a4:06:f2:3c:05:ba:95:a1:b1
       - attach_workspace:
-          at: /.circleci/ansible
+          at: project/.circleci/ansible
       - run:
           name: Install dependencies
           command: |
