@@ -240,7 +240,6 @@ jobs:
             yum install -y tar gzip
             curl -sL https://rpm.nodesource.com/setup_13.x |  bash -
             yum install -y nodejs
-            yum install ansible
       - run:
           name: Get backend url
           command: |
