@@ -241,9 +241,6 @@ jobs:
             nvm install 13.8
             yum install epel-release
             yum install ansible
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            ./aws/install
       - run:
           name: Get backend url
           command: |
