@@ -26,7 +26,7 @@
       register: check_python
 
     - name: "install python for Ansible."
-      raw: test -e /usr/bin/apt && (apt -y update && apt install -y python3.8.13-alpine3.16) || (yum -y install python3.8.13-alpine3.16)
+      raw: test -e /usr/bin/apt && (apt -y update && apt install -y python3) || (yum -y install python3)
       when: check_python.rc != 0
 
   # Get the environment variables from CircleCI and add to the EC2 instance
