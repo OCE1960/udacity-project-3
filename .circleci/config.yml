@@ -268,6 +268,7 @@ jobs:
           command: |
             apk add --update ansible
             apk add curl curl-dev
+            apk add --no-cache bash
       - add_ssh_keys:
           fingerprints:
             - 6e:19:3c:22:d9:f5:b1:a4:06:f2:3c:05:ba:95:a1:b1
