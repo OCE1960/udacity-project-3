@@ -266,20 +266,12 @@ jobs:
       - run:
           name: Install tar utility
           command: |
-            apk add --update ansible
-            apk add curl curl-dev
-            apk add --no-cache bash
+            apk add --update ansible gzip tar nodejs npm
       - add_ssh_keys:
           fingerprints:
             - 6e:19:3c:22:d9:f5:b1:a4:06:f2:3c:05:ba:95:a1:b1
       - attach_workspace:
           at: .circleci/ansible
-      - run:
-          name: Install dependencies
-          command: |
-            curl -sL https://rpm.nodesource.com/setup_13.x |  bash -
-            yum install -y nodejs
-            yum install -y ansible
       - run:
           name: Deploy backend
           command: |
