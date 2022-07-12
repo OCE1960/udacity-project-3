@@ -260,12 +260,13 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - run:
           name: Install tar utility
           command: |
+            apk add --update ansible
             yum install -y tar gzip
       - add_ssh_keys:
           fingerprints:
