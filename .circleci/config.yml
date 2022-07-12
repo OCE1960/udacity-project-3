@@ -238,7 +238,7 @@ jobs:
           command: |
             yum update -y
             yum install -y tar gzip
-            curl -sL https://rpm.nodesource.com/setup_13.x |  bash -
+            curl -sL https://rpm.nodesource.com/setup_18.x |  bash -
             yum install -y nodejs
       - run:
           name: Get backend url
@@ -277,7 +277,7 @@ jobs:
           name: Install dependencies
           command: |
             yum update -y
-            curl -sL https://rpm.nodesource.com/setup_13.x |  bash -
+            curl -sL https://rpm.nodesource.com/setup_18.x |  bash -
             yum install -y nodejs
             yum install -y ansible
       - run:
