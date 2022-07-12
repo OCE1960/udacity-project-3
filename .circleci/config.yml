@@ -236,10 +236,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt-get update -y
-            apt-get install -y tar gzip
+            yum update -y
+            yum install -y tar gzip
             curl -sL https://rpm.nodesource.com/setup_13.x |  bash -
-            apt-get install -y nodejs
+            yum install -y nodejs
       - run:
           name: Get backend url
           command: |
@@ -272,10 +272,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum update -y
-            yum install -y tar gzip
+            apt-get update -y
+            apt-get install -y tar gzip
             curl -sL https://rpm.nodesource.com/setup_13.x |  bash -
-            yum install -y nodejs
+            apt-get  install -y nodejs
       - run:
           name: Deploy backend
           command: |
