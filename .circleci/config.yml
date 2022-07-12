@@ -279,6 +279,7 @@ jobs:
             yum update -y
             curl -sL https://rpm.nodesource.com/setup_13.x |  bash -
             yum install -y nodejs
+            yum install -y ansible
       - run:
           name: Deploy backend
           command: |
