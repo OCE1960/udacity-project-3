@@ -267,6 +267,7 @@ jobs:
           name: Install tar utility
           command: |
             apk add --update ansible
+            apk add curl curl-dev
             yum install -y tar gzip
       - add_ssh_keys:
           fingerprints:
