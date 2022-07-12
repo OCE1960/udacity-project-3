@@ -261,7 +261,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: amazon/aws-cli
     steps:
       - checkout
       - add_ssh_keys:
@@ -272,10 +272,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt update -y
-            apt install -y tar gzip
-            curl -sL https://rpm.nodesource.com/setup_13.x |  bash -
-            apt  install -y nodejs
+            yum update -y
       - run:
           name: Deploy backend
           command: |
