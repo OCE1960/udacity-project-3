@@ -264,6 +264,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run:
+          name: Install tar utility
+          command: |
+            yum install -y tar gzip
       - add_ssh_keys:
           fingerprints:
             - 6e:19:3c:22:d9:f5:b1:a4:06:f2:3c:05:ba:95:a1:b1
@@ -273,7 +277,6 @@ jobs:
           name: Install dependencies
           command: |
             yum update -y
-            yum install -y tar gzip
             curl -sL https://rpm.nodesource.com/setup_13.x |  bash -
             yum install -y nodejs
       - run:
