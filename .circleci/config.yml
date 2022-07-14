@@ -179,6 +179,9 @@ jobs:
   configure-infrastructure:
     docker:
       - image: python:3.7-alpine3.11
+    pre_tasks:
+      - name: "wait 600 seconds for target connection to become reachable/usable."
+        command: sleep 120
     steps:
       - checkout
       - add_ssh_keys:
