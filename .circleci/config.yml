@@ -10,11 +10,6 @@ commands:
         default: ""  
     steps:
       - run:
-          name: aws cli
-          when: on_fail
-          command: |
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-      - run:
           name: Destroy backend environments
           when: on_fail
           command: |
