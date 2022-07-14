@@ -178,10 +178,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
-    pre_tasks:
-      - name: "wait 600 seconds for target connection to become reachable/usable."
-        command: sleep 120
+      - image: python:3.7-alpine3.11   
     steps:
       - checkout
       - add_ssh_keys:
@@ -196,6 +193,9 @@ jobs:
             apk add --update --no-cache python3 py3-pip
             /usr/local/bin/python -m pip install --upgrade pip
             pip install awscli
+      - run:
+          name: "wait 600 seconds for target connection to become reachable/usable."
+          command: sleep 120
       - run:
           name: Configure server
           command: |
