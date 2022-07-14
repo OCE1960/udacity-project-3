@@ -1,26 +1,42 @@
 ---
-- name: install nodejs prerequisites
+- name: Install Dependencies
+  become: true
   apt:
-    name:
-      - apt-transport-https
-      - gcc
-      - g++
-      - make
-    state: present
-- name: add nodejs apt key
-  apt_key:
-    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state: present
-- name: add nodejs repository
-  apt_repository:
-    repo: deb https://deb.nodesource.com/node_12.x {{ ansible_lsb.codename }} main
-    state: present
+    name: ["nodejs", "npm"]
+    state: latest
     update_cache: yes
-- name: install nodejs
-  apt:
-    name: nodejs
-    state: present
-- name: Install PM2
+
+- name: Install pm2
+  become: true
   npm:
     name: pm2
     global: yes
+    production: yes
+    state: present
+
+- name: Creates Directory
+  file:
+    path: /home/ubuntu/backend
+    state: directory
+
+- name: Copy backend dist files web server
+  copy:
+    src: /root/project/artifact.tar.gz
+    dest: /home/ubuntu/backend/artifact.tar.gz
+
+- name: Uncompress Backend
+  shell: |
+    cd /home/ubuntu/backend
+    tar xvzf artifact.tar.gz -C .
+    ls -la
+- name: Build
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    npm install
+    npm run build
+    
+- name: Start PM2
+  shell: |
+    cd /home/ubuntu/backend
+    pm2 start npm --name backend -- start
