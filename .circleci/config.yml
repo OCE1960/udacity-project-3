@@ -167,37 +167,34 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      # - destroy-environment:
-      #     id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - destroy-environment:
+          id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
-  # configure-infrastructure:
-  #   docker:
-  #     - image: python:3.7-alpine3.11   
-  #   steps:
-  #     - checkout
-  #     - add_ssh_keys:
-  #         fingerprints:
-  #           - "07:52:e3:73:eb:eb:35:e1:e6:dc:55:4d:ef:37:d1:33"
-  #     - attach_workspace:
-  #         at: ~/
-  #     - run:
-  #         name: Install dependencies
-  #         command: |
-  #           apk add --update ansible
-  #           apk add --update --no-cache python3 py3-pip
-  #           /usr/local/bin/python -m pip install --upgrade pip
-  #           pip install awscli
-  #     - run:
-  #         name: "wait 600 seconds for target connection to become reachable/usable."
-  #         command: sleep 120
-  #     - run:
-  #         name: Configure server
-  #         command: |
-  #           cd ~/project/.circleci/ansible
-  #           echo "Okeke Chukwuemeka your server public IP address for the backend is:"
-  #           cat inventory.txt
-  #           ansible-playbook -i inventory.txt configure-server.yml 
-  #     - destroy-environment
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11   
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - 07:52:e3:73:eb:eb:35:e1:e6:dc:55:4d:ef:37:d1:33
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            apk add --update --no-cache python3 py3-pip
+            /usr/local/bin/python3 -m pip install --upgrade pip
+            pip install awscli
+      - run:
+          name: Configure server
+          command: |
+            cd ~/project/.circleci/ansible
+            echo "Okeke Chukwuemeka your server public IP address for the backend is:"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt configure-server.yml 
+      - destroy-environment
 
   # run-migrations:
   #   docker:
@@ -318,8 +315,8 @@ workflows:
           requires: [build-backend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       #- run-migrations:
       #    requires: [configure-infrastructure]
       #- deploy-frontend:

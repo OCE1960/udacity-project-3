@@ -11,23 +11,23 @@
     - ansible_python_interpreter: /usr/bin/python3
     - ansible_host_key_checking: false
     - ansible_stdout_callback: yaml
-    - NODEJS_VERSION: "18"
-    - ansible_distribution_release: "xenial" #trusty
+    # - NODEJS_VERSION: "18"
+    # - ansible_distribution_release: "xenial" #trusty
 
-  pre_tasks:
-    - name: "wait 600 seconds for target connection to become reachable/usable."
-      wait_for:
-        delay: 600
+  # pre_tasks:
+  #   - name: "wait 600 seconds for target connection to become reachable/usable."
+  #     wait_for:
+  #       delay: 600
 
-    - name: Check for Python
-      raw: test -e /usr/bin/python3
-      changed_when: false
-      failed_when: false
-      register: check_python
+  #   - name: Check for Python
+  #     raw: test -e /usr/bin/python3
+  #     changed_when: false
+  #     failed_when: false
+  #     register: check_python
 
-    - name: "install python for Ansible."
-      raw: test -e /usr/bin/apt && (apt -y update && apt install -y python3) || (yum -y install python3)
-      when: check_python.rc != 0
+  #   - name: "install python for Ansible."
+  #     raw: test -e /usr/bin/apt && (apt -y update && apt install -y python3) || (yum -y install python3)
+      # when: check_python.rc != 0
 
   # Get the environment variables from CircleCI and add to the EC2 instance
   environment:
