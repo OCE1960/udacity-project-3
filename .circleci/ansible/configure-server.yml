@@ -14,10 +14,14 @@
     # - NODEJS_VERSION: "18"
     # - ansible_distribution_release: "xenial" #trusty
 
-  # pre_tasks:
-  #   - name: "wait 600 seconds for target connection to become reachable/usable."
-  #     wait_for:
-  #       delay: 600
+  pre_tasks:
+    - name: "wait 600 seconds for target connection to become reachable/usable."
+      wait_for_connection:
+
+    - name: "install python for Ansible."
+      become: true
+      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
+      changed_when: false
 
   #   - name: Check for Python
   #     raw: test -e /usr/bin/python3
