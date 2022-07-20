@@ -193,7 +193,8 @@ jobs:
             cd ~/project/.circleci/ansible
             echo "Okeke Chukwuemeka your server public IP address for the backend is:"
             cat inventory.txt
-            ansible-playbook -i inventory.txt configure-server.yml 
+            ansible-playbook -i inventory.txt configure-server.yml
+          no_output_timeout: 1h 
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
