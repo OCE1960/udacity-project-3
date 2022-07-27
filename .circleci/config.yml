@@ -172,7 +172,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: python:3.9-alpine3.15   
+      - image: python:3.7-alpine3.16   
     steps:
       - checkout
       - add_ssh_keys:
@@ -184,7 +184,6 @@ jobs:
           command: |
             apk add --update ansible
             apk add --update --no-cache python3 py3-pip
-            /usr/bin/python3 -m pip install --upgrade pip
             pip install awscli
       - run:
           name: Configure server
