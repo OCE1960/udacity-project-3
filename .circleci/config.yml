@@ -260,47 +260,49 @@ jobs:
       - revert-migrations:
           id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
-  # deploy-backend:
-  #   docker:
-  #     - image: python:3.7-alpine3.11
-  #   steps:
-  #     - checkout
-  #     - add_ssh_keys:
-  #         fingerprints: ["3f:83:ad:76:9c:1b:ba:68:9e:ef:c7:78:5a:b0:fe:35"]
-  #     - attach_workspace:
-  #         at: ~/
-  #     - run:
-  #         name: Install dependencies
-  #         command: |
-  #           apk add --update ansible
-  #           apk add --update tar gzip nodejs npm
-  #           apk add --update --no-cache python3 py3-pip
-  #           /usr/local/bin/python -m pip install --upgrade pip
-  #           pip install awscli 
-  #     - run:
-  #         name: Deploy backend
-  #         command: |
-  #           cd backend
-  #           echo TYPEORM_CONNECTION=postgres >> ".env"
-  #           echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
-  #           echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
-  #           echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> ".env"
-  #           echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
-  #           echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
-  #           echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
-  #           echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
-  #           echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
-  #           npm install
-  #           npm run build
-  #           cd ..
-  #           pwd
-  #           tar -C backend -czvf artifact.tar.gz .
-  #           cd .circleci/ansible
-  #           echo "Taiwo your inventory.txt file content is ---"
-  #           cat inventory.txt
-  #           ansible-playbook -i inventory.txt deploy-backend.yml 
-  #     - destroy-environment
-  #     - revert-migrations   
+  deploy-backend:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["3f:83:ad:76:9c:1b:ba:68:9e:ef:c7:78:5a:b0:fe:35"]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            apk add --update tar gzip nodejs npm
+            apk add --update --no-cache python3 py3-pip
+            /usr/local/bin/python -m pip install --upgrade pip
+            pip install awscli 
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            echo TYPEORM_CONNECTION=postgres >> ".env"
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> ".env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
+            npm install
+            npm run build
+            cd ..
+            pwd
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Okeke Chukwuemeka your inventory.txt file content is ---"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml 
+      - destroy-environment:
+          id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - revert-migrations:
+          id: ${CIRCLE_WORKFLOW_ID:0:7}   
 
 workflows:
   default:
@@ -323,5 +325,5 @@ workflows:
          requires: [configure-infrastructure]
       - deploy-frontend:
          requires: [run-migrations]
-      #- deploy-backend:
-      #    requires: [run-migrations]
+      - deploy-backend:
+         requires: [run-migrations]
