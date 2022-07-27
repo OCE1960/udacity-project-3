@@ -176,7 +176,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["db:f6:e5:5e:e9:61:6b:e7:bb:22:d0:5e:e4:c7:0e:f3"]
+          fingerprints: ["3f:83:ad:76:9c:1b:ba:68:9e:ef:c7:78:5a:b0:fe:35"]
       - attach_workspace:
           at: ~/
       - run:
@@ -192,7 +192,6 @@ jobs:
             cd ~/project/.circleci/ansible
             echo "Okeke Chukwuemeka your server public IP address for the backend is:"
             cat inventory.txt
-            --key-file ~/.ssh/id_rsa_dbf6e55ee9616be7bb22d05ee4c70ef3 -vvvv
             ansible-playbook -i inventory.txt configure-server.yml
 
           no_output_timeout: 1h 
@@ -266,7 +265,7 @@ jobs:
   #   steps:
   #     - checkout
   #     - add_ssh_keys:
-  #         fingerprints: ["db:f6:e5:5e:e9:61:6b:e7:bb:22:d0:5e:e4:c7:0e:f3"]
+  #         fingerprints: ["3f:83:ad:76:9c:1b:ba:68:9e:ef:c7:78:5a:b0:fe:35"]
   #     - attach_workspace:
   #         at: ~/
   #     - run:
