@@ -275,7 +275,6 @@ jobs:
             apk add --update ansible
             apk add --update tar gzip nodejs npm
             apk add --update --no-cache python3 py3-pip
-            /usr/local/bin/python -m pip install --upgrade pip
             pip install awscli 
       - run:
           name: Deploy backend
