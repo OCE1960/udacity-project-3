@@ -281,6 +281,7 @@ jobs:
           name: Deploy backend
           command: |
             cd backend
+            touch .env
             echo TYPEORM_CONNECTION=postgres >> ".env"
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
             echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
