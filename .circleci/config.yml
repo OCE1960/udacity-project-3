@@ -291,7 +291,6 @@ jobs:
             export API_URL="http://${BACKEND_IP}:3030" 
             echo "${API_URL}"
             touch .env
-            echo NO_PROXY="${BACKEND_IP}" >> ".env"
             echo TYPEORM_CONNECTION=postgres >> ".env"
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
             echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
