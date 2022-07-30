@@ -391,7 +391,46 @@ jobs:
           id: ${CIRCLE_WORKFLOW_ID:0:7}  
 
       - revert-migrations:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}     
+          id: ${CIRCLE_WORKFLOW_ID:0:7}
+
+  cleanup:
+    docker:
+      - image: amazon/aws-cli 
+    steps:
+      - checkout
+      - run:
+          name: Removing old stack workflow id
+          command: |
+            export OldWorkflowID=$(aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+              --no-paginate --output text)
+            echo $OldWorkflowID >> ~/OldWorkflowID.txt
+            cat ~/OldWorkflowID.txt
+
+            echo OldWorkflowID: "${OldWorkflowID}"
+            echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+
+            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+              --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) \
+              echo Stack names: "${STACKS[@]}"  
+
+
+            if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
+            then
+              echo "------------------------Removing older stacks------------------------"
+              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}" 
+              echo "----Removal completed----"
+            else
+              echo "----There is nothing to do----"
+            fi
+
+      - destroy-environment:
+          id: ${CIRCLE_WORKFLOW_ID:0:7} 
+
+      - revert-migrations:
+          id: ${CIRCLE_WORKFLOW_ID:0:7}      
 
 workflows:
   default:
@@ -420,3 +459,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]
