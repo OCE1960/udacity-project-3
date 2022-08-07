@@ -14,3 +14,4 @@
       wait_for_connection:
   roles:
     - deploy
+    - configure-prometheus-node-exporter
